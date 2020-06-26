@@ -28,7 +28,7 @@ client = boto3.session.Session().client('s3',
 def get_last_snapshot_name():
     result = client.list_objects_v2(
         Bucket=DO_D3_SPACE,
-        Prefix=ENV_NAME,
+        Prefix=ENV_NAME + '-snapshot',
         MaxKeys=1000
     )
 
