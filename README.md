@@ -18,7 +18,7 @@
 ./snapshot-loader.py --last-load
 ```
 
-### Print last block num
+### Print last snapshot's block num
 
 ```bash
 ./snapshot-loader.py --last-num
