@@ -25,14 +25,29 @@ client = boto3.session.Session().client('s3',
 )
 
 
-def get_last_snapshot_name():
+def fetch_all_snapshots():
     result = client.list_objects_v2(
         Bucket=DO_D3_SPACE,
         Prefix=ENV_NAME + '-snapshot',
         MaxKeys=1000
     )
 
-    files = result['Contents']
+    all_content = result['Contents']
+
+    while result['IsTruncated']:
+        result = client.list_objects_v2(
+            Bucket=DO_D3_SPACE,
+            Prefix=ENV_NAME + '-snapshot',
+            MaxKeys=1000,
+            StartAfter=result['Contents'][-1]['Key']
+        )
+        all_content = all_content + result['Contents']
+
+    return all_content
+
+
+def get_last_snapshot_name():
+    files = fetch_all_snapshots()
 
     files.sort(key=lambda x:x['LastModified'])
 
